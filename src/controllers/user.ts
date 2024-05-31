@@ -2,10 +2,46 @@ import { Router, Request } from 'express';
 import prisma from '../prisma-client';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { IUser } from '../types';
+import { IUser, getUserRoleEnum } from '../types';
 import { JwtSecret, JwtExpiresIn } from '../constants';
 
 export const router = Router();
+
+interface UserRegisterRequest extends Request {
+  body: {
+    email: string;
+    password: string;
+    role: string;
+  }
+};
+
+router.post('/', async (req: UserRegisterRequest, res) => {
+  const { email, password, role } = req.body;
+  const roleEnum = await getUserRoleEnum(role);
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    }
+  });
+
+  if ( user ) {
+    res.status(409).send({ message: 'User already exists' });
+    return;
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  await prisma.user.create({
+    data: {
+      email,
+      password: hashedPassword,
+      role: roleEnum,
+    }
+  });
+
+  res.status(201).send({ message: 'User created' });
+});
 
 interface UserLoginRequest extends Request {
   body: {

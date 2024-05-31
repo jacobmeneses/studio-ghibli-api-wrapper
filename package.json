@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "dev": "ts-node src/index.ts --env-file=.env",
-    "seed": "ts-node --transpile-only prisma/seed.ts"
+    "seed": "ts-node --transpile-only prisma/seed.ts --env-file=.env "
   },
   "author": "Jacob Meneses",
   "license": "ISC",
@@ -27,6 +27,7 @@
     "@types/node": "^20.12.12",
     "@types/passport": "^1.0.16",
     "@types/passport-jwt": "^4.0.1",
+    "mocha": "^10.4.0",
     "prisma": "^5.14.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
