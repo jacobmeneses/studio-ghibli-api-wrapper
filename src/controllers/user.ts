@@ -8,12 +8,82 @@ import { authJWT, authJWTByRoles } from '../middleware/auth';
 
 export const router = Router();
 
+type FlexibleType  = {
+  [key: string]: any 
+};
+
 const authAdmin = authJWTByRoles([ AdminRole ])
 const selectUserFields = {
   id: true,
   email: true,
   role: true,
 };
+
+interface EditUserRequest extends Request {
+  params: {
+    id: string;
+  },
+  body: {
+    email: string;
+    role: string;
+    password: string;
+  }
+};
+
+router.put('/:id', authAdmin, async (req: EditUserRequest, res) => {
+  const id = parseInt(req.params.id);
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id,
+    }
+  });
+
+  if ( !user ) {
+    res.status(404).send({ message: 'User not found' });
+    return;
+  }
+
+  let data : FlexibleType = {};
+
+  const transform : FlexibleType = {
+    role: async (value: any) : Promise<any> => {
+      const roleEnum = await getUserRoleEnum(value);
+
+      return roleEnum;
+    },
+    password: async (value: any) : Promise<any> => {
+      const hashedPassword = await bcrypt.hash(value, 10);
+      return hashedPassword;
+    }
+  };
+  const keys = Object.keys(req.body);
+
+  for ( let i = 0; i < keys.length; i++ ) {
+    const key = keys[i] as keyof EditUserRequest['body'];
+
+    if ( key in transform ) {
+      data[key] = await transform[key](req.body[key]);
+    } else {
+      data[key] = req.body[key];
+    }
+  }
+
+  if ( Object.keys(data).length === 0 ) {
+    res.status(400).send({ message: 'No data provided' });
+    return;
+  }
+
+  await prisma.user.update({
+    where: {
+      id,
+    },
+    data,
+  });
+
+  res.send({ message: 'User updated' });
+});
+
 
 interface GetUserRequest extends Request {
   params: {

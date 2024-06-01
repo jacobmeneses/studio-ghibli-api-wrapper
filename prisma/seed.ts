@@ -18,6 +18,18 @@ async function main() {
       email: 'films@example.com',
       password: hashedPassword,
       role: 'FILMS'
+    },
+    {
+      id: 3,
+      email: 'to-edit-2@example.com',
+      password: hashedPassword,
+      role: 'FILMS'
+    },
+    {
+      id: 4,
+      email: 'to-edit-3@example.com',
+      password: hashedPassword,
+      role: 'FILMS'
     }
   ];
 

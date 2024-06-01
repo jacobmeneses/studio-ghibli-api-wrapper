@@ -49,9 +49,23 @@ const getUserById = async (token, id) => {
   return response;
 };
 
+const updateUser = async (token, id, body) => {
+  const response = await fetch(BaseUrl + '/users/' + id, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+    },
+    body: JSON.stringify(body),
+  });
+
+  return response;
+}
+
 module.exports = {
   login,
   register,
   getUsers,
   getUserById,
+  updateUser,
 };
