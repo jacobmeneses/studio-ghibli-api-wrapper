@@ -5,3 +5,4 @@ export const isDevEnv = NODE_ENV === development_str;
 export const DefaultApiPort = 3000;
 export const JwtExpiresIn = process.env.JWT_TOKEN_EXPIRATION || '1h';
 export const JwtSecret = process.env.JWT_SECRET || '';
+export const AdminRole = 'ADMIN';

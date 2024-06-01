@@ -6,12 +6,21 @@ const hashedPassword = '$2a$12$OSZqHSfgnQtu.6g.Bjghy.xHwoLGTYpg.F74ZqHYmmkcBWPrE
 async function main() {
   await prisma.user.deleteMany({});
 
-  await prisma.user.create({
-    data: {
+  const users = [
+    {
       email: 'admin@example.com',
       password: hashedPassword,
       role: 'ADMIN',
     },
+    {
+      email: 'films@example.com',
+      password: hashedPassword,
+      role: 'FILMS'
+    }
+  ];
+
+  await prisma.user.createMany({
+    data: users
   });
 }
 

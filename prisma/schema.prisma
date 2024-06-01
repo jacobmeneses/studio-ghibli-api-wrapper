@@ -24,4 +24,10 @@ model User {
 
 enum Role {
   ADMIN
+  FILMS
+  PEOPLE
+  LOCATIONS
+  SPECIES
+  VEHICLES
 }
+

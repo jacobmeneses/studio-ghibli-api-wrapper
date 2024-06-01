@@ -3,9 +3,16 @@ import prisma from '../prisma-client';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { IUser, getUserRoleEnum } from '../types';
-import { JwtSecret, JwtExpiresIn } from '../constants';
+import { JwtSecret, JwtExpiresIn, AdminRole } from '../constants';
+import { authJWT, authJWTByRoles } from '../middleware/auth';
 
 export const router = Router();
+const authAdmin = authJWTByRoles([ AdminRole ])
+
+router.get('/', authAdmin, async (req, res) => {
+  const users = await prisma.user.findMany();
+  res.json(users);
+});
 
 interface UserRegisterRequest extends Request {
   body: {
@@ -15,7 +22,7 @@ interface UserRegisterRequest extends Request {
   }
 };
 
-router.post('/', async (req: UserRegisterRequest, res) => {
+router.post('/', authAdmin, async (req: UserRegisterRequest, res) => {
   const { email, password, role } = req.body;
   const roleEnum = await getUserRoleEnum(role);
 
@@ -70,7 +77,10 @@ router.post('/login', async (req: UserLoginRequest, res) => {
       return res.status(401).json({ message: 'Invalid password' });
   }
 
-  const token = jwt.sign({ id: user.id }, JwtSecret, { expiresIn: JwtExpiresIn });
+  const token = jwt.sign({
+    id: user.id,
+    role: user.role as string,
+  }, JwtSecret, { expiresIn: JwtExpiresIn });
 
   res.json({ token });
 });
