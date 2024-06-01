@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { login, register, getUsers } = require('./client');
+const { login, register, getUsers, getUserById } = require('./client');
 
 describe('User', () => {
   describe('Login', () => {
@@ -56,6 +56,44 @@ describe('User', () => {
       const body = await response.json();
 
       assert.equal(response.status, 200);
+      assert.equal(body.users.length > 0, true);
+    });
+  });
+
+  describe.only('Get user by id', () => {
+    it('should NOT get an user if it is not logged in', async () => {
+      const response = await getUserById('', 2);
+      const body = await response.json();
+
+      assert.equal(response.status, 401);
+    });
+
+    it('should NOT get an user if it is the wrong role', async () => {
+      const res = await login('films@example.com', '123456789');
+      const b = await res.json();
+      const response = await getUserById(b.token, 1);
+      const body = await response.json();
+
+      assert.equal(response.status, 403);
+    });
+
+    it('should NOT get an user if it does not exists', async () => {
+      const res = await login('admin@example.com', '123456789');
+      const b = await res.json();
+      const response = await getUserById(b.token, 9999999);
+      const body = await response.json();
+
+      assert.equal(response.status, 404);
+    });
+
+    it('should get an user', async () => {
+      const res = await login('admin@example.com', '123456789');
+      const b = await res.json();
+      const response = await getUserById(b.token, 2);
+      const body = await response.json();
+
+      assert.equal(response.status, 200);
+      assert.equal(body.id !== 0, true);
     });
   });
 });

@@ -8,11 +8,13 @@ async function main() {
 
   const users = [
     {
+      id: 1,
       email: 'admin@example.com',
       password: hashedPassword,
       role: 'ADMIN',
     },
     {
+      id: 2,
       email: 'films@example.com',
       password: hashedPassword,
       role: 'FILMS'

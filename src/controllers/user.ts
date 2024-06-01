@@ -7,11 +7,42 @@ import { JwtSecret, JwtExpiresIn, AdminRole } from '../constants';
 import { authJWT, authJWTByRoles } from '../middleware/auth';
 
 export const router = Router();
+
 const authAdmin = authJWTByRoles([ AdminRole ])
+const selectUserFields = {
+  id: true,
+  email: true,
+  role: true,
+};
+
+interface GetUserRequest extends Request {
+  params: {
+    id: string;
+  }
+};
+
+router.get('/:id', authAdmin, async (req: GetUserRequest, res) => {
+  const id = parseInt(req.params.id);
+  const user = await prisma.user.findUnique({
+    where: {
+      id,
+    },
+    select: selectUserFields,
+  });
+
+  if ( !user ) {
+    res.status(404).send({ message: 'User not found' });
+    return;
+  }
+
+  res.json(user);
+});
 
 router.get('/', authAdmin, async (req, res) => {
-  const users = await prisma.user.findMany();
-  res.json(users);
+  const users = await prisma.user.findMany({
+    select: selectUserFields,
+  });
+  res.json({ users });
 });
 
 interface UserRegisterRequest extends Request {

@@ -37,8 +37,21 @@ const getUsers = async (token) => {
   return response;
 };
 
+const getUserById = async (token, id) => {
+  const response = await fetch(BaseUrl + '/users/' + id, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+    },
+  });
+
+  return response;
+};
+
 module.exports = {
   login,
   register,
   getUsers,
+  getUserById,
 };
