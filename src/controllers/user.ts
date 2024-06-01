@@ -19,6 +19,37 @@ const selectUserFields = {
   role: true,
 };
 
+interface DeleteUserRequestUser {
+  id: number;
+}
+
+interface DeleteUserRequest extends Request {
+  body: {
+    users: Array<DeleteUserRequestUser>;
+  }
+}
+
+router.delete('/', authAdmin, async (req: DeleteUserRequest, res) => {
+  const { users } = req.body;
+
+  if ( !users || users.length === 0 ) {
+    res.status(400).send({ message: 'No users provided' });
+    return;
+  }
+
+  const ids = users.map(user => user.id);
+
+  await prisma.user.deleteMany({
+    where: {
+      id: {
+        in: ids,
+      }
+    }
+  });
+
+  res.send({ message: 'Users deleted' });
+});
+
 interface EditUserRequest extends Request {
   params: {
     id: string;

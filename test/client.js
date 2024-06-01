@@ -60,7 +60,20 @@ const updateUser = async (token, id, body) => {
   });
 
   return response;
-}
+};
+
+const deleteUsers = async (token, body) => {
+  const response = await fetch(BaseUrl + '/users', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+    },
+    body: JSON.stringify(body),
+  });
+
+  return response;
+};
 
 module.exports = {
   login,
@@ -68,4 +81,5 @@ module.exports = {
   getUsers,
   getUserById,
   updateUser,
+  deleteUsers,
 };

@@ -5,6 +5,7 @@ const {
   getUsers,
   getUserById,
   updateUser,
+  deleteUsers,
 } = require('./client');
 
 const NonExistentId = 9999999;
@@ -168,6 +169,57 @@ describe('User', () => {
       const body = await response.json();
 
       assert.equal(response.status, 200);
+    });
+  });
+
+  describe.only('Delete user', () => {
+    const request = {
+      users: [
+        { id: 5 }, 
+        { id: 6 }, 
+      ]
+    };
+
+    it('should NOT delete an user if it is not logged in', async () => {
+      const response = await deleteUsers('', request);
+      const body = await response.json();
+
+      assert.equal(response.status, 401);
+    });
+
+    it('should NOT delete an user if it is not ADMIN', async () => {
+      const res = await login('films@example.com', '123456789');
+      const b = await res.json();
+
+      const response = await deleteUsers(b.token, request);
+      const body = await response.json();
+
+      assert.equal(response.status, 403);
+    });
+
+    it('should NOT delete an user if request is emtpy', async () => {
+      const res = await login(AdminEmail, AdminPassword);
+      const b = await res.json();
+
+      const response = await deleteUsers(b.token, {});
+      const body = await response.json();
+
+      assert.equal(response.status, 400);
+    });
+
+    it('should delete some users', async () => {
+      const res = await login(AdminEmail, AdminPassword);
+      const b = await res.json();
+
+      const response = await deleteUsers(b.token, request);
+      const body = await response.json();
+
+      assert.equal(response.status, 200);
+
+      const r2 = await getUserById(b.token, request.users[0].id);
+      const b2 = await r2.json();
+
+      assert.equal(r2.status, 404);
     });
   });
 });
