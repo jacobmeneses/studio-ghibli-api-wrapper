@@ -172,7 +172,7 @@ describe('User', () => {
     });
   });
 
-  describe.only('Delete user', () => {
+  describe('Delete user', () => {
     const request = {
       users: [
         { id: 5 }, 

@@ -42,7 +42,31 @@ async function main() {
       email: 'to-delete-2@example.com',
       password: hashedPassword,
       role: 'FILMS'
-    }
+    },
+    {
+      id: 7,
+      email: 'people@example.com',
+      password: hashedPassword,
+      role: 'PEOPLE'
+    },
+    {
+      id: 8,
+      email: 'locations@example.com',
+      password: hashedPassword,
+      role: 'LOCATIONS',
+    },
+    {
+      id: 9,
+      email: 'species@example.com',
+      password: hashedPassword,
+      role: 'SPECIES'
+    },
+    {
+      id: 10,
+      email: 'vehicles@example.com',
+      password: hashedPassword,
+      role: 'VEHICLES'
+    },
   ];
 
   await prisma.user.createMany({

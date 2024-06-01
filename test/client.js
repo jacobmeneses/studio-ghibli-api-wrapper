@@ -75,6 +75,20 @@ const deleteUsers = async (token, body) => {
   return response;
 };
 
+const ghibli = async (token, queryParams = {}) => {
+  const queryString = new URLSearchParams(queryParams).toString();
+
+  const response = await fetch(BaseUrl + '/ghibli?' + queryString, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+    },
+  });
+
+  return response;
+};
+
 module.exports = {
   login,
   register,
@@ -82,4 +96,5 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUsers,
+  ghibli,
 };

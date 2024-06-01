@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { router as userRouter } from './user';
+import { router as ghibliRouter } from './ghibli';
 
 export class AppRouter {
   path: string;
@@ -13,4 +14,5 @@ export class AppRouter {
 
 export const routers = [ 
   new AppRouter('/users', userRouter),
+  new AppRouter('/ghibli', ghibliRouter),
 ];
