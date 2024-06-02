@@ -25,13 +25,13 @@ CORS_ORIGIN='http://0.0.0.0'
 docker-compose up --build -d
 ```
 
-## Step 3. Insert the Admin user (for testing this repo)
-Once the containers are up and running, execute:
+
+## Test the api
+
+Once the containers are up and running, execute this for insert an admin user: 
 ```bash
 cat initial.sql | docker exec -i ghibli_db psql -U prod_user940127 -d studio_ghibli_prod
 ```
-
-## Test the api
 
 These are the available endpoints:
 - POST /api/v1/users/login
