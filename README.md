@@ -46,7 +46,7 @@ These are the available endpoints:
 ### Login
 
 ```bash
-curl -X POST http://localhost:3040/api/v1/users/login -H "Content-Type: application/json" -d '{"email":"admin@example.com","password":"Admin123+45"}'
+curl -X POST http://localhost:3010/api/v1/users/login -H "Content-Type: application/json" -d '{"email":"admin@example.com","password":"Admin123+45"}'
 ```
 
 Set the session token for further requests:
@@ -59,23 +59,23 @@ export TOKEN='token field of the output of previous curl '
 ### Create an user
 
 ```bash
-curl -X POST http://localhost:3040/api/v1/users -H "Content-Type: application/json" -H "Authorization: Bearer "$TOKEN -d '{"email":"vehicles@example.com","password":"Hello123+45","role":"VEHICLES"}' 
+curl -X POST http://localhost:3010/api/v1/users -H "Content-Type: application/json" -H "Authorization: Bearer "$TOKEN -d '{"email":"vehicles@example.com","password":"Hello123+45","role":"VEHICLES"}' 
 ```
 
 ### Consume ghibli by role
 
 First login as VEHICLES role
 ```bash
-curl -X POST http://localhost:3040/api/v1/users/login -H "Content-Type: application/json" -d '{"email":"vehicles@example.com","password":"Hello123+45"}'
+curl -X POST http://localhost:3010/api/v1/users/login -H "Content-Type: application/json" -d '{"email":"vehicles@example.com","password":"Hello123+45"}'
 ```
 
 Set the token of the previous curl's output and call the api
 ```bash
 export TOKEN_V_USER='token field of the output of the login curl of vehicles role'
-curl http://localhost:3040/api/v1/ghibli\?limit\=5 -H "Content-Type: application/json" -H 'Authorization: Bearer '$TOKEN_V_USER
+curl http://localhost:3010/api/v1/ghibli\?limit\=5 -H "Content-Type: application/json" -H 'Authorization: Bearer '$TOKEN_V_USER
 ```
 
 ### Get all users
 ```bash
-curl -X GET http://localhost:3040/api/v1/users -H "Content-Type: application/json" -H "Authorization: Bearer "$TOKEN 
+curl -X GET http://localhost:3010/api/v1/users -H "Content-Type: application/json" -H "Authorization: Bearer "$TOKEN 
 ```
