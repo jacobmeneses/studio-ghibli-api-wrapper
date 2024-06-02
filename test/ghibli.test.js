@@ -5,7 +5,7 @@ const {
 } = require('./client');
 const password = '123456789';
 
-describe.only('Ghibli', () => {
+describe('Ghibli', () => {
   describe('Admin', () => {
     const email = 'admin@example.com';
 
