@@ -19,3 +19,16 @@ router.get('/', authJWTByRoles(GhibliRoles), async (req, res) => {
 
   res.status(r.status).send(data);
 });
+
+router.get('/:id', authJWTByRoles(GhibliRoles), async (req, res) => {
+  if ( !req.user ) {
+    res.status(401).send({ message: 'Unauthorized' });
+    return;
+  }
+
+  const role = req.user.role.toLowerCase();
+  const r = await fetch(`${GhibliApiUrl}/${role}/${req.params.id}`);
+  const data = await r.json();
+
+  res.status(r.status).send(data);
+});
