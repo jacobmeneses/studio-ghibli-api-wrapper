@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "tsc": "tsc",
     "test": "mocha",
     "dev": "ts-node src/index.ts --env-file=.env",
     "seed": "ts-node --transpile-only prisma/seed.ts --env-file=.env "

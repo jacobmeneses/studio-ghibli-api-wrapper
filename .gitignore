@@ -1,6 +1,9 @@
 node_modules/
 prisma/migrations/
 .env
+.production.env
+dist/
+postgres_data/
 
 # personal use
 .temp.sh

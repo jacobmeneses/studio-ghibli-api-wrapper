@@ -124,6 +124,7 @@ interface GetUserRequest extends Request {
 
 router.get('/:id', authAdmin, async (req: GetUserRequest, res) => {
   const id = parseInt(req.params.id);
+
   const user = await prisma.user.findUnique({
     where: {
       id,
@@ -139,11 +140,25 @@ router.get('/:id', authAdmin, async (req: GetUserRequest, res) => {
   res.json(user);
 });
 
-router.get('/', authAdmin, async (req, res) => {
+interface GetUsersRequest extends Request {
+  query: {
+    limit: string;
+    offset: string;
+  }
+};
+
+router.get('/', authAdmin, async (req: GetUsersRequest, res) => {
+  const limit = parseInt(req.query.limit || '25' );
+  const offset = parseInt(req.query.offset || '0' );
+
   const users = await prisma.user.findMany({
+    take: limit,
+    skip: offset,
     select: selectUserFields,
   });
-  res.json({ users });
+  const count = await prisma.user.count();
+
+  res.json({ count, users });
 });
 
 interface UserRegisterRequest extends Request {

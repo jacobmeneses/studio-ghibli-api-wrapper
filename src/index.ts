@@ -13,7 +13,12 @@ const corsOptions = {
 	methods: 'GET,POST,PUT,DELETE',
 };
 
-app.use(cors(isDevEnv ? corsOptions : {}));
+const _cors = cors(isDevEnv ? corsOptions : {
+  origin: process.env.CORS_ORIGIN,
+  methods: 'GET,POST,PUT,DELETE',
+})
+
+app.use(_cors);
 app.use(passport.initialize());
 app.use(express.json());
 
